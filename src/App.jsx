@@ -9,7 +9,7 @@ const App = () => {
       <BrowserRouter>
       <Routes>
         <Route path='/' element={<CitiesTable/>}/>
-        <Route path='/weather' element={<WeatherPage/>}/>
+        <Route path='/weather/:cityName' element={<WeatherPage/>}/>
       
       </Routes>
       </BrowserRouter>

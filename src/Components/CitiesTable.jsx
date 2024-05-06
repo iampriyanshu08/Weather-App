@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const CitiesTable = () => {
   const [cities, setCities] = useState([]);
@@ -73,8 +74,10 @@ const CitiesTable = () => {
                   {filterCities.map((city, id) => (
                     <tbody className="divide-y divide-gray-200" key={id}>
                       <tr className="hover:bg-gray-100">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 cursor-pointer">
+                            <Link to={`/weather/${city.name}`}>
                           {city.name}
+                            </Link>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                           {city.cou_name_en}
