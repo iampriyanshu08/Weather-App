@@ -1,11 +1,23 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import cloudIcon from '../assets/cloudy.png'
+import sunIcon from '../assets/sun.png'
+import rainIcon from '../assets/rainy.png'
+import fogIcon from '../assets/fog.png'
+// import sunnyBg from '../assets/sunny.jpg'
+import sunnyBg from '../assets/sunny2.jpg'
+import rainyBg from '../assets/rainy.jpg'
+import cloudyBg from '../assets/cloudy.jpg'
+import clearBg from '../assets/clear.jpg'
 
 const WeatherPage = () => {
   // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
   const APIKEY = import.meta.env.VITE_API_KEY;
   const [weatherdata, setweatherdata] = useState(null)
+  const [icon, seticon] = useState(fogIcon)
+  const [background, setbackground] = useState(cloudyBg)
+  const [Currdate, setCurrdate] = useState("")
   const {cityName} = useParams()
   console.log(cityName)
   const getWeatherDAta = async () => {
@@ -27,6 +39,37 @@ const WeatherPage = () => {
 
   console.log(weatherdata)
 
+  useEffect(() => {
+
+    if(weatherdata&&weatherdata.weather){
+        const weathericon = weatherdata.weather[0].main
+    if(weathericon==="Clouds"){
+        seticon(cloudIcon)
+        setbackground(cloudyBg)
+
+    }
+    else if(weathericon==="Rain"){
+        seticon(rainIcon)
+        setbackground(rainyBg)
+    }
+    else if(weathericon==="Clear"){
+        seticon(sunIcon)
+        setbackground(sunnyBg)
+    }
+    
+
+    }
+    const date = new Date()
+    const options = {weekday:"long", year:"numeric",month:"long",day:"numeric"}
+    setCurrdate(date.toLocaleDateString("en-us",options));
+
+
+    console.log(date)
+    
+    
+  }, [weatherdata])
+  
+
   
 
   return <>
@@ -34,25 +77,12 @@ const WeatherPage = () => {
     {weatherdata && (
         <div>
   
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center" style={{backgroundImage:`url(${background})`,backgroundSize:"cover",backgroundPosition:"center"}}>
           <div className="flex flex-col bg-white rounded p-4 w-full max-w-xs border-2">
             <div className="font-bold text-xl">{cityName}</div>
-            <div className="text-sm text-gray-500">Thursday 10 May 2020</div>
+            <div className="text-sm text-gray-500">{Currdate}</div>
             <div className="mt-6 text-6xl self-center inline-flex items-center justify-center rounded-lg text-indigo-400 h-24 w-24">
-              <svg
-                className="w-32 h-32"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
-                />
-              </svg>
+            <img src={icon} alt="" />
             </div>
             <div className="flex flex-row items-center justify-center mt-6">
               <div className="font-medium text-6xl">{Math.floor(weatherdata.main.temp-273.15)}°C</div>
